@@ -1,34 +1,35 @@
 #include "Queue_private.h"
 
-int queue_private::task(queue &q)
+queue_private::queue_private(queue &q1)
 {
 	this->clear();
-	//копируем data очереди на который указывает ссылка в данную очередь
-	this->copy(q);
+	//копирование q1 в this
 
-	//подсчёт числа элементов больших среднего арифметического значения
-	node *ptr = this->get_end_ptr();
-	int count = 0, sum = 0;
+	node *end_ptr_q1 = q1.get_end_ptr(), *ptr = nullptr;
+	int counter = 0, *array1 = nullptr;
 
-	float aref;
-	while (ptr)
+	ptr = end_ptr_q1;
+	while (ptr)//Нахождение количества элементов очереди
 	{
-		count++;
-		sum += ptr->data;
+		counter++;
 		ptr = ptr->prev_ptr;
 	}
-	aref = (int)sum / count;
-	count = 0;
-	ptr = this->get_end_ptr();
-	while (ptr)
+	array1 = new int[counter];
+	ptr = end_ptr_q1;
+	for (int i = 0; counter - i > 0; i++)//заполнение массива array1 элементами очереди, где [0] - первый элемент очереди;
 	{
-		if (ptr->data > aref)
-			count++;
-
+		*(array1 + counter - i - 1) = ptr->data;
 		ptr = ptr->prev_ptr;
 	}
+	for (int i = 0; counter > i; i++)
+	{
+		this->push(*(array1 + i));
+	}
+	delete[] array1;
 
+}
 
-
-	return count;
+int queue_private::task_private()
+{
+	return this->task();
 }
